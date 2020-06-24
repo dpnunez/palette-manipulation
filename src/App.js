@@ -1,26 +1,60 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react';
+import styled from 'styled-components';
 
-function App() {
+import {colorType, isValidColor, generatePalette} from './helpers/colors'
+
+const App = () => {
+  const [colorBase, setColorBase] = useState('')
+  const [colorsQt, setColorsQt] = useState(3)
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    <Container>
+      <input
+        placeholder='insira a cor base'
+        value={colorBase}
+        onChange={e => setColorBase(e.target.value)}
+      />
+      <input
+        type='number'
+        placeholder='insira a quantidade de cores'
+        value={colorsQt}
+        onChange={e => setColorsQt(e.target.value)}
+      />
+      <ColorsPreview>
+        {generatePalette(colorBase, colorsQt).map(color => (
+          <div key={color} style={{backgroundColor: color}} />
+        ))}
+      </ColorsPreview>
+
+      <p>{colorType(colorBase)}</p>
+      {isValidColor(colorBase) && generatePalette(colorBase, colorsQt)}
+    </Container>
+  )
 }
+
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  width: 100vw;
+
+  input {
+    margin: 10px;
+    width: 200px;
+  }
+`
+
+const ColorsPreview = styled.div`
+  height: 100px;
+  width: 100%;
+  display: flex;
+
+  div {
+    flex: 1;
+    height: 100%;
+  }
+`
 
 export default App;
